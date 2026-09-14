@@ -8,7 +8,12 @@ repositories {
 }
 
 dependencies {
+    implementation(platform(libs.spring.boot.dependencies))
+    implementation(libs.spring.boot.starter.liquibase)
+}
 
+dependencies {
+    runtimeOnly(libs.postgresql.driver)
 }
 
 configure<JavaPluginExtension> {
