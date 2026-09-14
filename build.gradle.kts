@@ -1,9 +1,14 @@
 plugins {
     java
+    alias(libs.plugins.spring.boot)
 }
 
 repositories {
     mavenCentral()
+}
+
+dependencies {
+
 }
 
 configure<JavaPluginExtension> {
