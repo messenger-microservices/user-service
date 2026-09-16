@@ -175,6 +175,10 @@ public class User {
         }
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     @Override
     public boolean equals(Object object) {
         if (object == null || getClass() != object.getClass()) return false;
