@@ -5,14 +5,13 @@ import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import ru.pulsarmn.messenger.user.domain.UserPrincipal;
 import ru.pulsarmn.messenger.user.dto.PageResponse;
 import ru.pulsarmn.messenger.user.dto.UserProfileResponse;
 import ru.pulsarmn.messenger.user.dto.UserSearchResponse;
+import ru.pulsarmn.messenger.user.dto.UsernameUpdateRequest;
 import ru.pulsarmn.messenger.user.service.UserService;
 
 
@@ -36,6 +35,13 @@ public class UserRestController {
     @GetMapping("/me")
     ResponseEntity<UserProfileResponse> getProfile(UserPrincipal userPrincipal) {
         UserProfileResponse response = userService.getUserProfile(userPrincipal.userId());
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/me/username")
+    ResponseEntity<UserProfileResponse> updateUsername(UserPrincipal userPrincipal,
+                                                       @Validated @RequestBody UsernameUpdateRequest request) {
+        UserProfileResponse response = userService.updateDisplayName(userPrincipal.userId(), request);
         return ResponseEntity.ok(response);
     }
 }
