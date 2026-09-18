@@ -1,4 +1,4 @@
-package ru.pulsarmn.messenger.user.dto;
+package ru.pulsarmn.messenger.user.dto.response;
 
 import org.springframework.data.domain.Page;
 

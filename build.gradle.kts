@@ -30,6 +30,10 @@ configure<JavaPluginExtension> {
     }
 }
 
+tasks.withType<JavaCompile> {
+    options.compilerArgs.add("-parameters");
+}
+
 tasks.withType<Test> {
     useJUnitPlatform()
 }
