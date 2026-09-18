@@ -8,16 +8,21 @@ import ru.pulsarmn.messenger.user.exception.UserNotFoundException;
 import ru.pulsarmn.messenger.user.mapper.UserMapper;
 import ru.pulsarmn.messenger.user.repository.UserRepository;
 
+import java.time.Clock;
+import java.time.LocalDate;
+import java.util.Objects;
 import java.util.UUID;
 
 
 @Service
 public class UserService {
 
+    private final Clock clock;
     private final UserMapper userMapper;
     private final UserRepository userRepository;
 
-    public UserService(UserMapper userMapper, UserRepository userRepository) {
+    public UserService(Clock clock, UserMapper userMapper, UserRepository userRepository) {
+        this.clock = clock;
         this.userMapper = userMapper;
         this.userRepository = userRepository;
     }
@@ -53,6 +58,22 @@ public class UserService {
                 .map(user -> {
                     if (!(user.getDisplayName()).equals(request.newDisplayName())) {
                         user.setDisplayName(request.newDisplayName());
+                        userRepository.save(user);
+                    }
+                    return user;
+                })
+                .map(userMapper::mapToProfileResponse)
+                .orElseThrow(() -> new UserNotFoundException("User with id '%s' not found".formatted(userId)));
+    }
+
+    @Transactional
+    public UserProfileResponse updateBirthdate(UUID userId, BirthdateUpdateRequest request) {
+        return userRepository.findById(userId)
+                .map(user -> {
+                    if (request.newBirthdate().isAfter(LocalDate.now(clock))) {
+                        return user;
+                    } else if (!Objects.equals(user.getBirthdate(), request.newBirthdate())) {
+                        user.setBirthdate(request.newBirthdate());
                         userRepository.save(user);
                     }
                     return user;
