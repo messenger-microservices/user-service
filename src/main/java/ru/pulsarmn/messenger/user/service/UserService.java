@@ -37,7 +37,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserProfileResponse updateDisplayName(UUID userId, UsernameUpdateRequest request) {
+    public UserProfileResponse updateUsername(UUID userId, UsernameUpdateRequest request) {
         return userRepository.findById(userId)
                 .map(user -> {
                     if (!(user.getUsername()).equals(request.newUsername())) {
