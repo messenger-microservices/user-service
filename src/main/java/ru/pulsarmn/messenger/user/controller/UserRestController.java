@@ -8,10 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.pulsarmn.messenger.user.domain.UserPrincipal;
-import ru.pulsarmn.messenger.user.dto.PageResponse;
-import ru.pulsarmn.messenger.user.dto.UserProfileResponse;
-import ru.pulsarmn.messenger.user.dto.UserSearchResponse;
-import ru.pulsarmn.messenger.user.dto.UsernameUpdateRequest;
+import ru.pulsarmn.messenger.user.dto.*;
 import ru.pulsarmn.messenger.user.service.UserService;
 
 
@@ -41,6 +38,13 @@ public class UserRestController {
     @PatchMapping("/me/username")
     ResponseEntity<UserProfileResponse> updateUsername(UserPrincipal userPrincipal,
                                                        @Validated @RequestBody UsernameUpdateRequest request) {
+        UserProfileResponse response = userService.updateUsername(userPrincipal.userId(), request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/me/name")
+    ResponseEntity<UserProfileResponse> updateDisplayName(UserPrincipal userPrincipal,
+                                                          @Validated @RequestBody DisplayNameUpdateRequest request) {
         UserProfileResponse response = userService.updateDisplayName(userPrincipal.userId(), request);
         return ResponseEntity.ok(response);
     }
