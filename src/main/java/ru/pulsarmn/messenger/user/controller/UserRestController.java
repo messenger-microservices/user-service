@@ -41,4 +41,11 @@ public class UserRestController {
         UserProfileResponse response = userService.updateUsername(userPrincipal.userId(), request);
         return ResponseEntity.ok(response);
     }
+
+    @PatchMapping("/me/name")
+    ResponseEntity<UserProfileResponse> updateDisplayName(UserPrincipal userPrincipal,
+                                                          @Validated @RequestBody DisplayNameUpdateRequest request) {
+        UserProfileResponse response = userService.updateDisplayName(userPrincipal.userId(), request);
+        return ResponseEntity.ok(response);
+    }
 }
