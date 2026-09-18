@@ -1,8 +1,11 @@
 package ru.pulsarmn.messenger.user.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.pulsarmn.messenger.user.domain.User;
 import ru.pulsarmn.messenger.user.dto.*;
 import ru.pulsarmn.messenger.user.exception.UserNotFoundException;
 import ru.pulsarmn.messenger.user.mapper.UserMapper;
@@ -12,6 +15,7 @@ import java.time.Clock;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.function.Function;
 
 
 @Service
@@ -20,6 +24,8 @@ public class UserService {
     private final Clock clock;
     private final UserMapper userMapper;
     private final UserRepository userRepository;
+
+    private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
     public UserService(Clock clock, UserMapper userMapper, UserRepository userRepository) {
         this.clock = clock;
@@ -35,49 +41,65 @@ public class UserService {
     public UserProfileResponse getUserProfile(UUID userId) {
         return userRepository.findById(userId)
                 .map(userMapper::mapToProfileResponse)
-                .orElseThrow(() -> new UserNotFoundException("User with id '%s' was not found"));
+                .orElseThrow(() -> new UserNotFoundException("User with id '%s' was not found".formatted(userId)));
     }
 
     @Transactional
     public UserProfileResponse updateUsername(UUID userId, UsernameUpdateRequest request) {
-        return userRepository.findById(userId)
-                .map(user -> {
-                    if (!(user.getUsername()).equals(request.newUsername())) {
-                        user.setUsername(request.newUsername());
-                        userRepository.save(user);
-                    }
-                    return user;
-                })
-                .map(userMapper::mapToProfileResponse)
-                .orElseThrow(() -> new UserNotFoundException("User with id '%s' not found".formatted(userId)));
+        return update(userId, user -> saveNewUsernameIfNecessary(user, request));
+    }
+
+    private User saveNewUsernameIfNecessary(User user, UsernameUpdateRequest request) {
+        String newUsername = request.newUsername();
+        if (!Objects.equals(user.getUsername(), newUsername)) {
+            user.setUsername(newUsername);
+            userRepository.saveAndFlush(user);
+            log.info("The username for the user with id {} has been successfully updated to {}", user.getId(), newUsername);
+        }
+        return user;
     }
 
     @Transactional
     public UserProfileResponse updateDisplayName(UUID userId, DisplayNameUpdateRequest request) {
-        return userRepository.findById(userId)
-                .map(user -> {
-                    if (!(user.getDisplayName()).equals(request.newDisplayName())) {
-                        user.setDisplayName(request.newDisplayName());
-                        userRepository.save(user);
-                    }
-                    return user;
-                })
-                .map(userMapper::mapToProfileResponse)
-                .orElseThrow(() -> new UserNotFoundException("User with id '%s' not found".formatted(userId)));
+        return update(userId, user -> saveNewDisplayNameIfNecessary(user, request));
+    }
+
+    private User saveNewDisplayNameIfNecessary(User user, DisplayNameUpdateRequest request) {
+        String newDisplayName = request.newDisplayName();
+        if (!Objects.equals(user.getDisplayName(), newDisplayName)) {
+            user.setDisplayName(newDisplayName);
+            userRepository.saveAndFlush(user);
+            log.info("The display name for the user with id {} has been successfully updated to {}", user.getId(), newDisplayName);
+        }
+        return user;
     }
 
     @Transactional
     public UserProfileResponse updateBirthdate(UUID userId, BirthdateUpdateRequest request) {
+        return update(userId, user -> saveNewBirthdateIfNecessary(user, request));
+    }
+
+    private User saveNewBirthdateIfNecessary(User user, BirthdateUpdateRequest request) {
+        LocalDate newBirthdate = request.newBirthdate();
+        if (isInvalidBirthdate(newBirthdate)) {
+            throw new IllegalArgumentException("Invalid birthdate: " + newBirthdate);
+        }
+
+        if (!Objects.equals(user.getBirthdate(), newBirthdate)) {
+            user.setBirthdate(newBirthdate);
+            userRepository.saveAndFlush(user);
+            log.info("The birthdate for the user with id {} has been successfully updated to {}", user.getId(), newBirthdate);
+        }
+        return user;
+    }
+
+    private boolean isInvalidBirthdate(LocalDate birthdate) {
+        return birthdate.isAfter(LocalDate.now(clock)); // TODO: extract to BirthdateValidator or something similar
+    }
+
+    private UserProfileResponse update(UUID userId, Function<User, User> updateFunction) {
         return userRepository.findById(userId)
-                .map(user -> {
-                    if (request.newBirthdate().isAfter(LocalDate.now(clock))) {
-                        return user;
-                    } else if (!Objects.equals(user.getBirthdate(), request.newBirthdate())) {
-                        user.setBirthdate(request.newBirthdate());
-                        userRepository.save(user);
-                    }
-                    return user;
-                })
+                .map(updateFunction)
                 .map(userMapper::mapToProfileResponse)
                 .orElseThrow(() -> new UserNotFoundException("User with id '%s' not found".formatted(userId)));
     }
