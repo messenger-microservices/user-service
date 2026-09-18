@@ -6,7 +6,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.pulsarmn.messenger.user.domain.User;
-import ru.pulsarmn.messenger.user.dto.*;
+import ru.pulsarmn.messenger.user.dto.request.BirthdateUpdateRequest;
+import ru.pulsarmn.messenger.user.dto.request.DisplayNameUpdateRequest;
+import ru.pulsarmn.messenger.user.dto.request.UsernameUpdateRequest;
+import ru.pulsarmn.messenger.user.dto.response.PageResponse;
+import ru.pulsarmn.messenger.user.dto.response.UserProfileResponse;
+import ru.pulsarmn.messenger.user.dto.response.UserSearchResponse;
 import ru.pulsarmn.messenger.user.exception.UserNotFoundException;
 import ru.pulsarmn.messenger.user.mapper.UserMapper;
 import ru.pulsarmn.messenger.user.repository.UserRepository;
@@ -54,7 +59,7 @@ public class UserService {
         if (!Objects.equals(user.getUsername(), newUsername)) {
             user.setUsername(newUsername);
             userRepository.saveAndFlush(user);
-            log.info("The username for the user with id {} has been successfully updated to {}", user.getId(), newUsername);
+            log.info("The username for the user with id '{}' has been successfully updated to '{}'", user.getId(), newUsername);
         }
         return user;
     }
@@ -69,7 +74,7 @@ public class UserService {
         if (!Objects.equals(user.getDisplayName(), newDisplayName)) {
             user.setDisplayName(newDisplayName);
             userRepository.saveAndFlush(user);
-            log.info("The display name for the user with id {} has been successfully updated to {}", user.getId(), newDisplayName);
+            log.info("The display name for the user with id '{}' has been successfully updated to '{}'", user.getId(), newDisplayName);
         }
         return user;
     }
@@ -88,7 +93,7 @@ public class UserService {
         if (!Objects.equals(user.getBirthdate(), newBirthdate)) {
             user.setBirthdate(newBirthdate);
             userRepository.saveAndFlush(user);
-            log.info("The birthdate for the user with id {} has been successfully updated to {}", user.getId(), newBirthdate);
+            log.info("The birthdate for the user with id '{}' has been successfully updated to '{}'", user.getId(), newBirthdate);
         }
         return user;
     }

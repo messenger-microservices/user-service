@@ -8,7 +8,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.pulsarmn.messenger.user.domain.UserPrincipal;
-import ru.pulsarmn.messenger.user.dto.*;
+import ru.pulsarmn.messenger.user.dto.request.BirthdateUpdateRequest;
+import ru.pulsarmn.messenger.user.dto.request.DisplayNameUpdateRequest;
+import ru.pulsarmn.messenger.user.dto.request.UsernameUpdateRequest;
+import ru.pulsarmn.messenger.user.dto.response.PageResponse;
+import ru.pulsarmn.messenger.user.dto.response.UserProfileResponse;
+import ru.pulsarmn.messenger.user.dto.response.UserSearchResponse;
 import ru.pulsarmn.messenger.user.service.UserService;
 
 
@@ -24,7 +29,7 @@ public class UserRestController {
 
     @GetMapping("/search")
     ResponseEntity<@NonNull PageResponse<UserSearchResponse>> findUsersByUsername(@RequestParam @Size(min = 2) String query,
-                                                                                    @PageableDefault(sort = "username") Pageable pageable) {
+                                                                                  @PageableDefault(sort = "username") Pageable pageable) {
         PageResponse<UserSearchResponse> response = userService.findUsers(query, pageable);
         return ResponseEntity.ok(response);
     }

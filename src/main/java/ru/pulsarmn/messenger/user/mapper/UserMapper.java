@@ -2,8 +2,8 @@ package ru.pulsarmn.messenger.user.mapper;
 
 import org.springframework.stereotype.Component;
 import ru.pulsarmn.messenger.user.domain.User;
-import ru.pulsarmn.messenger.user.dto.UserProfileResponse;
-import ru.pulsarmn.messenger.user.dto.UserSearchResponse;
+import ru.pulsarmn.messenger.user.dto.response.UserProfileResponse;
+import ru.pulsarmn.messenger.user.dto.response.UserSearchResponse;
 
 
 @Component

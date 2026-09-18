@@ -6,8 +6,8 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import ru.pulsarmn.messenger.user.dto.PageResponse;
-import ru.pulsarmn.messenger.user.dto.UserSearchResponse;
+import ru.pulsarmn.messenger.user.dto.response.PageResponse;
+import ru.pulsarmn.messenger.user.dto.response.UserSearchResponse;
 
 import java.time.Duration;
 
