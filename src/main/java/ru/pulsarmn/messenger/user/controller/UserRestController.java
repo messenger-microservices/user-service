@@ -24,7 +24,7 @@ public class UserRestController {
 
     @GetMapping("/search")
     ResponseEntity<@NonNull PageResponse<UserSearchResponse>> findUsersByUsername(@RequestParam @Size(min = 2) String query,
-                                                                                  @PageableDefault(sort = "username") Pageable pageable) {
+                                                                                    @PageableDefault(sort = "username") Pageable pageable) {
         PageResponse<UserSearchResponse> response = userService.findUsers(query, pageable);
         return ResponseEntity.ok(response);
     }
@@ -46,6 +46,13 @@ public class UserRestController {
     ResponseEntity<UserProfileResponse> updateDisplayName(UserPrincipal userPrincipal,
                                                           @Validated @RequestBody DisplayNameUpdateRequest request) {
         UserProfileResponse response = userService.updateDisplayName(userPrincipal.userId(), request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/me/birthdate")
+    ResponseEntity<UserProfileResponse> updateBirthdate(UserPrincipal userPrincipal,
+                                                        @Validated @RequestBody BirthdateUpdateRequest request) {
+        UserProfileResponse response = userService.updateBirthdate(userPrincipal.userId(), request);
         return ResponseEntity.ok(response);
     }
 }
