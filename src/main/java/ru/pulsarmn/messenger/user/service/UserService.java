@@ -10,6 +10,7 @@ import ru.pulsarmn.messenger.user.dto.request.BirthdateUpdateRequest;
 import ru.pulsarmn.messenger.user.dto.request.DisplayNameUpdateRequest;
 import ru.pulsarmn.messenger.user.dto.request.UsernameUpdateRequest;
 import ru.pulsarmn.messenger.user.dto.response.PageResponse;
+import ru.pulsarmn.messenger.user.dto.response.UserDto;
 import ru.pulsarmn.messenger.user.dto.response.UserProfileResponse;
 import ru.pulsarmn.messenger.user.dto.response.UserSearchResponse;
 import ru.pulsarmn.messenger.user.exception.UserNotFoundException;
@@ -47,6 +48,18 @@ public class UserService {
         return userRepository.findById(userId)
                 .map(userMapper::mapToProfileResponse)
                 .orElseThrow(() -> new UserNotFoundException("User with id '%s' was not found".formatted(userId)));
+    }
+
+    public UserDto getUserById(UUID userId) {
+        return userRepository.findById(userId)
+                .map(userMapper::mapToDto)
+                .orElseThrow(() -> new UserNotFoundException("User with id '%s' was not found".formatted(userId)));
+    }
+
+    public UserDto getUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .map(userMapper::mapToDto)
+                .orElseThrow(() -> new UserNotFoundException("User with username '%s' was not found".formatted(username)));
     }
 
     @Transactional

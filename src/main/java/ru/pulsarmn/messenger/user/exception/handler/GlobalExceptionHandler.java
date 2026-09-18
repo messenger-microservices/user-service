@@ -20,7 +20,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
     ProblemDetail handleUserNotFoundException(UserNotFoundException ex) {
         log.warn("User with some id not found", ex);
-        return ProblemDetail.forStatus(HttpStatus.UNAUTHORIZED);
+        return ProblemDetail.forStatus(HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(UnauthenticatedException.class)

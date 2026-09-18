@@ -8,10 +8,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import ru.pulsarmn.messenger.user.domain.User;
 
+import java.util.Optional;
 import java.util.UUID;
 
 
 public interface UserRepository extends JpaRepository<@NonNull User, @NonNull UUID> {
+
+    Optional<User> findByUsername(String username);
 
     @Query("SELECT u FROM User u WHERE u.username ILIKE CONCAT('%', :username, '%')")
     Page<@NonNull User> searchUsers(@Param("username") String username, Pageable pageable);
