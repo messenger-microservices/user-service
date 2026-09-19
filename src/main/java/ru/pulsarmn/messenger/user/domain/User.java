@@ -23,9 +23,6 @@ public class User {
     @Column(name = "username")
     private String username;
 
-    @Column(name = "password_hash")
-    private String passwordHash;
-
     @Column(name = "phone_number")
     private String phoneNumber;
 
@@ -45,10 +42,9 @@ public class User {
 
     public User() {}
 
-    public User(UUID id, String username, String passwordHash, String phoneNumber, String displayName, LocalDate birthdate, Instant createdAt, Instant updatedAt) {
+    public User(UUID id, String username, String phoneNumber, String displayName, LocalDate birthdate, Instant createdAt, Instant updatedAt) {
         this.id = id;
         this.username = username;
-        this.passwordHash = passwordHash;
         this.phoneNumber = phoneNumber;
         this.displayName = displayName;
         this.birthdate = birthdate;
@@ -70,14 +66,6 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPasswordHash() {
-        return passwordHash;
-    }
-
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
     }
 
     public String getPhoneNumber() {
@@ -123,7 +111,6 @@ public class User {
     public static class Builder {
         private UUID id;
         private String username;
-        private String passwordHash;
         private String phoneNumber;
         private String displayName;
         private LocalDate birthdate;
@@ -137,11 +124,6 @@ public class User {
 
         public Builder username(String username) {
             this.username = username;
-            return this;
-        }
-
-        public Builder passwordHash(String passwordHash) {
-            this.passwordHash = passwordHash;
             return this;
         }
 
@@ -171,7 +153,7 @@ public class User {
         }
 
         public User build() {
-            return new User(id, username, passwordHash, phoneNumber, displayName, birthdate, createdAt, updatedAt);
+            return new User(id, username, phoneNumber, displayName, birthdate, createdAt, updatedAt);
         }
     }
 
@@ -183,12 +165,12 @@ public class User {
     public boolean equals(Object object) {
         if (object == null || getClass() != object.getClass()) return false;
         User user = (User) object;
-        return Objects.equals(id, user.id) && Objects.equals(username, user.username) && Objects.equals(passwordHash, user.passwordHash) && Objects.equals(phoneNumber, user.phoneNumber) && Objects.equals(displayName, user.displayName) && Objects.equals(birthdate, user.birthdate) && Objects.equals(createdAt, user.createdAt) && Objects.equals(updatedAt, user.updatedAt);
+        return Objects.equals(id, user.id) && Objects.equals(username, user.username) && Objects.equals(phoneNumber, user.phoneNumber) && Objects.equals(displayName, user.displayName) && Objects.equals(birthdate, user.birthdate) && Objects.equals(createdAt, user.createdAt) && Objects.equals(updatedAt, user.updatedAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, passwordHash, phoneNumber, displayName, birthdate, createdAt, updatedAt);
+        return Objects.hash(id, username, phoneNumber, displayName, birthdate, createdAt, updatedAt);
     }
 
     @Override
@@ -196,7 +178,6 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
-                ", passwordHash='" + passwordHash + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", displayName='" + displayName + '\'' +
                 ", birthdate=" + birthdate +

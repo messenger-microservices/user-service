@@ -7,7 +7,6 @@ import java.util.UUID;
 
 public record UserDto(UUID id,
                       String username,
-                      String passwordHash,
                       String phoneNumber,
                       String displayName,
                       LocalDate birthdate,
@@ -17,7 +16,6 @@ public record UserDto(UUID id,
     public static class Builder {
         private UUID id;
         private String username;
-        private String passwordHash;
         private String phoneNumber;
         private String displayName;
         private LocalDate birthdate;
@@ -31,11 +29,6 @@ public record UserDto(UUID id,
 
         public Builder username(String username) {
             this.username = username;
-            return this;
-        }
-
-        public Builder passwordHash(String passwordHash) {
-            this.passwordHash = passwordHash;
             return this;
         }
 
@@ -65,7 +58,7 @@ public record UserDto(UUID id,
         }
 
         public UserDto build() {
-            return new UserDto(id, username, passwordHash, phoneNumber, displayName, birthdate, createdAt, updatedAt);
+            return new UserDto(id, username, phoneNumber, displayName, birthdate, createdAt, updatedAt);
         }
     }
 
