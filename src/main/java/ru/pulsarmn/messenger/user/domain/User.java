@@ -1,9 +1,11 @@
 package ru.pulsarmn.messenger.user.domain;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.annotations.UuidGenerator;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -16,8 +18,6 @@ import java.util.UUID;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @UuidGenerator(style = UuidGenerator.Style.VERSION_7)
     private UUID id;
 
     @Column(name = "username")
@@ -40,7 +40,8 @@ public class User {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    public User() {}
+    public User() {
+    }
 
     public User(UUID id, String username, String phoneNumber, String displayName, LocalDate birthdate, Instant createdAt, Instant updatedAt) {
         this.id = id;
