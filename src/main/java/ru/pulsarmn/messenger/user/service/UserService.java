@@ -51,18 +51,6 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("User with id '%s' was not found".formatted(userId)));
     }
 
-    public UserDto getUserById(UUID userId) {
-        return userRepository.findById(userId)
-                .map(userMapper::mapToDto)
-                .orElseThrow(() -> new UserNotFoundException("User with id '%s' was not found".formatted(userId)));
-    }
-
-    public UserDto getUserByUsername(String username) {
-        return userRepository.findByUsername(username)
-                .map(userMapper::mapToDto)
-                .orElseThrow(() -> new UserNotFoundException("User with username '%s' was not found".formatted(username)));
-    }
-
     @Transactional
     public UserDto createUser(UserCreateRequest request) {
         User user = userMapper.map(request);

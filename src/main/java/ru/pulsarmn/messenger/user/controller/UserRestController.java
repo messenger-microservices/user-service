@@ -39,18 +39,6 @@ public class UserRestController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{id}")
-    ResponseEntity<@NonNull UserDto> findUserById(@PathVariable("id") UUID userId) {
-        UserDto userDto = userService.getUserById(userId);
-        return ResponseEntity.ok(userDto);
-    }
-
-    @GetMapping
-    ResponseEntity<@NonNull UserDto> findUserByUsername(@RequestParam String username) {
-        UserDto userDto = userService.getUserByUsername(username);
-        return ResponseEntity.ok(userDto);
-    }
-
     @PostMapping
     ResponseEntity<@NonNull UserDto> createUser(@Validated @RequestBody UserCreateRequest request) {
         UserDto userDto = userService.createUser(request);
