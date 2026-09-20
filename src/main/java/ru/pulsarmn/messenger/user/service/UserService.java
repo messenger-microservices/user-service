@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.pulsarmn.messenger.user.domain.User;
 import ru.pulsarmn.messenger.user.dto.request.BirthdateUpdateRequest;
 import ru.pulsarmn.messenger.user.dto.request.DisplayNameUpdateRequest;
+import ru.pulsarmn.messenger.user.dto.request.UserCreateRequest;
 import ru.pulsarmn.messenger.user.dto.request.UsernameUpdateRequest;
 import ru.pulsarmn.messenger.user.dto.response.PageResponse;
 import ru.pulsarmn.messenger.user.dto.response.UserDto;
@@ -60,6 +61,13 @@ public class UserService {
         return userRepository.findByUsername(username)
                 .map(userMapper::mapToDto)
                 .orElseThrow(() -> new UserNotFoundException("User with username '%s' was not found".formatted(username)));
+    }
+
+    @Transactional
+    public UserDto createUser(UserCreateRequest request) {
+        User user = userMapper.map(request);
+        user = userRepository.saveAndFlush(user);
+        return userMapper.mapToDto(user);
     }
 
     @Transactional

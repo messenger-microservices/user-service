@@ -4,15 +4,17 @@ import jakarta.validation.constraints.Size;
 import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.pulsarmn.messenger.user.domain.UserPrincipal;
-import ru.pulsarmn.messenger.user.dto.response.UserDto;
 import ru.pulsarmn.messenger.user.dto.request.BirthdateUpdateRequest;
 import ru.pulsarmn.messenger.user.dto.request.DisplayNameUpdateRequest;
+import ru.pulsarmn.messenger.user.dto.request.UserCreateRequest;
 import ru.pulsarmn.messenger.user.dto.request.UsernameUpdateRequest;
 import ru.pulsarmn.messenger.user.dto.response.PageResponse;
+import ru.pulsarmn.messenger.user.dto.response.UserDto;
 import ru.pulsarmn.messenger.user.dto.response.UserProfileResponse;
 import ru.pulsarmn.messenger.user.dto.response.UserSearchResponse;
 import ru.pulsarmn.messenger.user.service.UserService;
@@ -49,6 +51,12 @@ public class UserRestController {
         return ResponseEntity.ok(userDto);
     }
 
+    @PostMapping
+    ResponseEntity<@NonNull UserDto> createUser(@Validated @RequestBody UserCreateRequest request) {
+        UserDto userDto = userService.createUser(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
+    }
+
     @GetMapping("/me")
     ResponseEntity<@NonNull UserProfileResponse> getProfile(UserPrincipal userPrincipal) {
         UserProfileResponse response = userService.getUserProfile(userPrincipal.userId());
@@ -57,21 +65,21 @@ public class UserRestController {
 
     @PatchMapping("/me/username")
     ResponseEntity<@NonNull UserProfileResponse> updateUsername(UserPrincipal userPrincipal,
-                                                       @Validated @RequestBody UsernameUpdateRequest request) {
+                                                                @Validated @RequestBody UsernameUpdateRequest request) {
         UserProfileResponse response = userService.updateUsername(userPrincipal.userId(), request);
         return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/me/name")
     ResponseEntity<@NonNull UserProfileResponse> updateDisplayName(UserPrincipal userPrincipal,
-                                                          @Validated @RequestBody DisplayNameUpdateRequest request) {
+                                                                   @Validated @RequestBody DisplayNameUpdateRequest request) {
         UserProfileResponse response = userService.updateDisplayName(userPrincipal.userId(), request);
         return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/me/birthdate")
     ResponseEntity<@NonNull UserProfileResponse> updateBirthdate(UserPrincipal userPrincipal,
-                                                        @Validated @RequestBody BirthdateUpdateRequest request) {
+                                                                 @Validated @RequestBody BirthdateUpdateRequest request) {
         UserProfileResponse response = userService.updateBirthdate(userPrincipal.userId(), request);
         return ResponseEntity.ok(response);
     }
