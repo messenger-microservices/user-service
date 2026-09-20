@@ -2,6 +2,7 @@ package ru.pulsarmn.messenger.user.mapper;
 
 import org.springframework.stereotype.Component;
 import ru.pulsarmn.messenger.user.domain.User;
+import ru.pulsarmn.messenger.user.dto.request.UserCreateRequest;
 import ru.pulsarmn.messenger.user.dto.response.UserDto;
 import ru.pulsarmn.messenger.user.dto.response.UserProfileResponse;
 import ru.pulsarmn.messenger.user.dto.response.UserSearchResponse;
@@ -9,6 +10,16 @@ import ru.pulsarmn.messenger.user.dto.response.UserSearchResponse;
 
 @Component
 public class UserMapper {
+
+    public User map(UserCreateRequest request) {
+        return User.builder()
+                .id(request.id())
+                .username(request.username())
+                .displayName(request.displayName())
+                .phoneNumber(request.phoneNumber())
+                .birthdate(request.birthdate())
+                .build();
+    }
 
     public UserSearchResponse mapToSearchResponse(User user) {
         return new UserSearchResponse(user.getUsername());
