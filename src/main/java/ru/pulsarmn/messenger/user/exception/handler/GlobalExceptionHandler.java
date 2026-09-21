@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.pulsarmn.messenger.user.exception.InvalidHeaderException;
@@ -44,6 +45,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     ProblemDetail handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
         log.warn("Invalid method argument(-s)", ex);
+        return ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    ProblemDetail handleMissingServletRequestParameter(MissingServletRequestParameterException ex) {
+        log.warn("Missing query parameter", ex);
         return ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
     }
 
