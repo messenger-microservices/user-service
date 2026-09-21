@@ -1,3 +1,5 @@
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
 plugins {
     java
     alias(libs.plugins.spring.boot)
@@ -32,6 +34,14 @@ configure<JavaPluginExtension> {
 
 tasks.withType<JavaCompile> {
     options.compilerArgs.add("-parameters");
+}
+
+tasks.withType<Jar> {
+    enabled = false
+}
+
+tasks.withType<BootJar> {
+    enabled = true
 }
 
 tasks.withType<Test> {
